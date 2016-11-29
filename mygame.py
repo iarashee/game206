@@ -9,7 +9,7 @@ DELAY = 1000;            #Seed a timer to move sprite
 
 bgcolor = (0,42,196)    #Color taken from background of sprite
 
-class Gold(Sprite):
+class Car(Sprite):
     def __init__(self):
         Sprite.__init__(self)
         self.image = image.load("gold.bmp").convert_alpha()
@@ -30,7 +30,7 @@ class Gold(Sprite):
     def update(self):
         self.rect.center = mouse.get_pos()
 
-class Poop(Gold):
+class Distract(Car):
     def __init__(self):
         Sprite.__init__(self)
         self.image = image.load("poop.bmp").convert_alpha()
@@ -41,7 +41,7 @@ class Poop(Gold):
 init()
 
 screen = display.set_mode((640, 480))
-display.set_caption('Dig-some-Gold')
+display.set_caption("Play Dodge 'Em!")
 
 # hide the mouse cursor so we only see shovel
 mouse.set_visible(False)
@@ -49,38 +49,38 @@ mouse.set_visible(False)
 f = font.Font(None, 25)
 
 # create the mole and shovel using the constructors
-gold = Gold()
-poop = Poop()
+car = Car()
+distract = Distract()
 # creates a group of sprites so all can be updated at once
-sprites = RenderPlain(gold, poop)
+sprites = RenderPlain(car, distract)
 
 hits = 0
 time.set_timer(USEREVENT + 1, DELAY)
 
 # loop until user quits
 while True:
-    e = event.poll()
+    e = event.get()
     if e.type == QUIT:
         quit()
         break
 
     elif e.type == MOUSEBUTTONDOWN:
-        if shovel.hit(gold):
+        if shovel.hit(car):
             mixer.Sound("cha-ching.wav").play()
-            gold.move()
+            car.move()
             hits += 1
 
-        if shovel.hit(poop):
+        if shovel.hit(distract):
             mixer.Sound("poop.wav").play()
-            poop.move()
+            distract.move()
             hits -= 1
 
             # reset timer
             time.set_timer(USEREVENT + 1, DELAY)
             
     elif e.type == USEREVENT + 1: # TIME has passed
-        gold.move()
-        poop.move()
+        car.move()
+        distract.move()
 
     # refill background color so that we can paint sprites in new locations
     screen.fill(bgcolor)
