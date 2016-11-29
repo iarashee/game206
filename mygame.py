@@ -12,7 +12,7 @@ bgcolor = (0,42,196)    #Color taken from background of sprite
 class Car(Sprite):
     def __init__(self):
         Sprite.__init__(self)
-        self.image = image.load("gold.bmp").convert_alpha()
+        self.image = image.load("myface.bmp").convert_alpha()
         self.rect = self.image.get_rect()
 
     # move gold to a new random location
@@ -57,37 +57,47 @@ sprites = RenderPlain(car, distract)
 hits = 0
 time.set_timer(USEREVENT + 1, DELAY)
 
+x = (display_width*0.45)
+y = (display_height*0.8)
+
+x_chng = 0
+
+thing_strt_x =  random.randrange(0, display_width)
+thing_strt_y = -600
+thing_speed = 4
+thing_width = 100
+thing_height = 100
+thing_count = 1
+dodged = 0
+
 # loop until user quits
 while True:
-    e = event.get()
-    if e.type == QUIT:
-        quit()
-        break
+    for event in event.get()
+        e = event.get()
+        if e.type == QUIT:
+            quit()
+            break
 
-    elif e.type == MOUSEBUTTONDOWN:
-        if shovel.hit(car):
-            mixer.Sound("cha-ching.wav").play()
+        elif e.type == KEYDOWN:
+            if event.key == K_LEFT:
+                # car goes left
+
+            if e.type == K_RIGHT:
+                # car goes right
+
+                # reset timer
+                time.set_timer(USEREVENT + 1, DELAY)
+                
+        elif e.type == USEREVENT + 1: # TIME has passed
             car.move()
-            hits += 1
-
-        if shovel.hit(distract):
-            mixer.Sound("poop.wav").play()
             distract.move()
-            hits -= 1
-
-            # reset timer
-            time.set_timer(USEREVENT + 1, DELAY)
-            
-    elif e.type == USEREVENT + 1: # TIME has passed
-        car.move()
-        distract.move()
 
     # refill background color so that we can paint sprites in new locations
-    screen.fill(bgcolor)
-    t = f.render("Jackpot = " + str(hits), False, (0,0,0))
-    screen.blit(t, (320, 0))        # draw text to screen.  Can you move it?
+        screen.fill(bgcolor)
+        t = f.render("Jackpot = " + str(hits), False, (0,0,0))
+        screen.blit(t, (320, 0))        # draw text to screen.  Can you move it?
 
-    # update and redraw sprites
-    sprites.update()
-    sprites.draw(screen)
-    display.update()
+        # update and redraw sprites
+        sprites.update()
+        sprites.draw(screen)
+        display.update()
