@@ -6,55 +6,59 @@ DELAY = 1000; #Seed a timer to move sprite; [What does this do?]
 
 bgcolor = (0,0,225)    
 
+dispaly_h = 700
+display_w = 500
+
 class Car(Sprite):
     def __init__(self):
         Sprite.__init__(self)
-        self.image = image.load("racecar.bmp").convert_alpha()
+        self.image = image.load("racecar.bmp")
         self.rect = self.image.get_rect()
+        self.rect.x = display_w*0.45
+        self.rect.y = dispaly_h*0.8
 
-        def move(self):
-            x = 200
-            y = 200
-            self.rect.center = (x, y)
+    def move(self, dx):
+        x = self.rect.x
+        x += dx
+        self.rect.x = x
 
-    # move gold to a new random location
-    #def move_up(self):
-        #x_change = randint(0, 600)
-
-        #self.rect.center = (randX,randY)
-
-    #The shovel sprite will move with the mousepointer
-    #def update(self):
-        self.rect.center = mouse.get_pos()
-
-class Block(Car):
+class Block(Sprite):
     def __init__(self):
         Sprite.__init__(self)
-        self.image = image.load("poop.bmp").convert_alpha()
+        self.image = image.load("poop.bmp")
         self.rect = self.image.get_rect()
+        self.rect.x = 100
+        self.rect.y = 100
 
-while True:
-    e = event.poll()
-    if e.type == KEYDOWN:
-        if e.key == K_LEFT:
-            x = x - 5
-            car.move()
+    def move(self):
+        y = self.rect.y
+        y += -10
+        self.rect.y = y
 
-screen = display.set_mode((640, 480))
-display.set_caption("Dodge 'Em!")
-
-screen.fill(bgcolor)
+init()
 
 car = Car()
 block = Block()
+sprites = RenderPlain(car, block)
 
-car_s = RenderPlain(car)
-block_s = RenderPlain(block)
+time.set_timer(USEREVENT + 1, DELAY)
 
-car_s.update()
-block_s.update()
+crashed = False
+while not crashed:
+    for e in event.get():
+        if e.type == KEYDOWN:
+            if e.key == K_LEFT:
+                car.move(dx = -10)
+            if e.key == K_RIGHT:
+                car.move(dx = 10)
 
-car_s.draw(screen)
-block_s.draw(screen)
+        elif e.type == USEREVENT + 1:
+            block.move()
 
-display.update()
+    screen = display.set_mode((display_w, dispaly_h))
+    display.set_caption("Dodge 'Em!")
+
+    screen.fill(bgcolor)
+    sprites.update()
+    sprites.draw(screen)
+    display.update()
