@@ -30,8 +30,8 @@ class Ball(Sprite):
         Sprite.__init__(self)
         self.image = image.load("ball.bmp")
         self.rect = self.image.get_rect()
-        self.rect.x = randint(10, display_w-5)
-        self.rect.y = 100
+        self.rect.x = randint(15, display_w-15)
+        self.rect.y = 10
 
     def move_down(self, dy):
         y = self.rect.y
@@ -71,7 +71,6 @@ while not crashed:
                     hoop.move(dx = 25)
                 
                 if e.key == K_q:
-                    t = f.render("QUIT", False, (0,0,0)) # text not working
                     screen.blit(t, (320, 0))
                     game_off = True
             
@@ -91,24 +90,25 @@ while not crashed:
         if score > 9: ## Fix!! Needs to increase speed
             ball.move_down(dy = 7)
 
-        if ball.rect.y >= (display_h - 5):
-            t6 = f.render("Hit Bottom, Game Done", True, (255,255,255))
-            screen.blit(t6, (200, 350))
+        if ball.rect.y >= (display_h - 20):
+            screen.blit(t6, (100, 250))
             game_off = True
 
-        if hoop.rect.x <= 0:
-            hoop.rect.x = 10
+        if hoop.rect.x <= -50:
+            hoop.rect.x = -50
 
-        if hoop.rect.x >= (display_w-342):
-            hoop.rect.x = (display_w-342)
+        if hoop.rect.x >= (display_w-300):
+            hoop.rect.x = (display_w-300)
 
         screen = display.set_mode((display_w, display_h))
         display.set_caption("Basketball!")
         screen.blit(bg_image, (0,0))
 
         t1 = score_f.render("Score = " + str(score), False, (0,0,0))
-        t2 = f.render("q = Quit", False, (0,0,0))
+        t2 = f.render("q = Quit", True, (0,0,0))
         t3 = f.render("Directions: Catch the basketballs. Balls move down faster over time. You lose when you miss.", False, (0,0,0))
+        t6 = f.render("Hit Bottom, Game Done", False, (255,255,255))
+        t = f.render("QUIT", False, (0,0,0)) # text not working
         
         screen.blit(t1, (100, 100))
         screen.blit(t2, (100, 150))
